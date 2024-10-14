@@ -1,5 +1,5 @@
 {
-  "name": "@rnr/starter-base",
+  "name": "2FA PPI AUTHENTICATOR",
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
@@ -13,8 +13,12 @@
     "postinstall": "npx tailwindcss -i ./global.css -o ./node_modules/.cache/nativewind/global.css"
   },
   "dependencies": {
+    "@otplib/core": "^12.0.1",
+    "@otplib/plugin-crypto-js": "^12.0.1",
+    "@otplib/plugin-thirty-two": "^12.0.1",
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/native": "^6.0.2",
+    "@rn-primitives/alert-dialog": "^1.0.5",
     "@rn-primitives/avatar": "~1.0.4",
     "@rn-primitives/portal": "~1.0.3",
     "@rn-primitives/progress": "~1.0.3",
@@ -24,6 +28,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "^51.0.24",
+    "expo-camera": "~15.0.16",
     "expo-linking": "~6.3.1",
     "expo-navigation-bar": "~3.0.7",
     "expo-router": "~3.5.20",
@@ -32,6 +37,7 @@
     "expo-system-ui": "~3.0.7",
     "lucide-react-native": "^0.378.0",
     "nativewind": "^4.0.33",
+    "otpauth-uri-parser": "^1.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.74.5",

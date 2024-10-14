@@ -70,8 +70,22 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: "Starter Base",
+            title: "2FA PPI AUTHENTICATOR",
             headerRight: () => <ThemeToggle />,
+          }}
+        />
+        <Stack.Screen
+          name="camera"
+          options={{
+            title: "Camera",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="scan-qr"
+          options={{
+            title: "Scan QR",
+            headerBackTitle: "Back",
           }}
         />
       </Stack>
