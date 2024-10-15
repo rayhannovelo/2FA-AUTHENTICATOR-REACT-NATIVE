@@ -4,6 +4,7 @@ import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
+import { useSQLiteContext } from "expo-sqlite";
 
 import { Authenticator } from "@otplib/core";
 import { keyDecoder, keyEncoder } from "@otplib/plugin-thirty-two";
@@ -21,10 +22,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 
-export default function Camera() {
+export default function ScanQR() {
+  const db = useSQLiteContext();
+
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
   const [openAlertWarning, setOpenAlertWarning] = useState(false);
@@ -48,7 +50,7 @@ export default function Camera() {
     );
   }
 
-  const handleBarcodeScanned = ({ data }: { data: string }) => {
+  const handleBarcodeScanned = async ({ data }: { data: string }) => {
     setScanned(true);
 
     const parsedData = otpauthUriParser(data);
@@ -75,8 +77,18 @@ export default function Camera() {
     // generate token
     const token = authenticator.generate(secret);
 
+    // save to db
+    await db.runAsync(
+      "INSERT INTO two_fas (reference_id, secret, issuer, account) VALUES (?, ?, ?, ?)",
+      parsedData.query.referenceId,
+      parsedData.query.secret,
+      parsedData.query.issuer,
+      parsedData.label.account
+    );
+
     setToken(token);
     setOpenAlertSuccess(true);
+    router.navigate("/");
   };
 
   return (

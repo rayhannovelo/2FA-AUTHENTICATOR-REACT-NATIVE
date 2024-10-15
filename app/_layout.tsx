@@ -98,7 +98,7 @@ export default function RootLayout() {
 }
 
 async function migrateDbIfNeeded(db: SQLiteDatabase) {
-  // initial version
+  // latest version
   const DATABASE_VERSION = 1;
 
   // get current version
@@ -115,19 +115,17 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
   // first migration
   if (currentDbVersion === 0) {
     await db.execAsync(`
-PRAGMA journal_mode = 'wal';
-CREATE TABLE todos (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
-`);
-    await db.runAsync(
-      "INSERT INTO todos (value, intValue) VALUES (?, ?)",
-      "hello",
-      1
-    );
-    await db.runAsync(
-      "INSERT INTO todos (value, intValue) VALUES (?, ?)",
-      "world",
-      2
-    );
+      PRAGMA journal_mode = 'wal';
+      CREATE TABLE IF NOT EXISTS two_fas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        reference_id TEXT NOT NULL,
+        secret TEXT NOT NULL,
+        issuer TEXT NOT NULL,
+        account TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+
     currentDbVersion = 1;
   }
 
@@ -135,6 +133,8 @@ CREATE TABLE todos (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intVal
   // if (currentDbVersion === 1) {
   //   currentDbVersion = 2;
   // }
+
+  currentDbVersion = 0;
 
   await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
