@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { SQLiteProvider, type SQLiteDatabase } from "expo-sqlite";
 import * as React from "react";
 import { Platform } from "react-native";
 import { NAV_THEME } from "~/lib/constants";
@@ -64,32 +65,76 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            title: "2FA PPI AUTHENTICATOR",
-            headerRight: () => <ThemeToggle />,
-          }}
-        />
-        <Stack.Screen
-          name="camera"
-          options={{
-            title: "Camera",
-            headerBackTitle: "Back",
-          }}
-        />
-        <Stack.Screen
-          name="scan-qr"
-          options={{
-            title: "Scan QR",
-            headerBackTitle: "Back",
-          }}
-        />
-      </Stack>
-      <PortalHost />
-    </ThemeProvider>
+    <SQLiteProvider databaseName="2fa.db" onInit={migrateDbIfNeeded}>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              title: "2FA PPI AUTHENTICATOR",
+              headerRight: () => <ThemeToggle />,
+            }}
+          />
+          <Stack.Screen
+            name="camera"
+            options={{
+              title: "Camera",
+              headerBackTitle: "Back",
+            }}
+          />
+          <Stack.Screen
+            name="scan-qr"
+            options={{
+              title: "Scan QR",
+              headerBackTitle: "Back",
+            }}
+          />
+        </Stack>
+        <PortalHost />
+      </ThemeProvider>
+    </SQLiteProvider>
   );
+}
+
+async function migrateDbIfNeeded(db: SQLiteDatabase) {
+  // initial version
+  const DATABASE_VERSION = 1;
+
+  // get current version
+  const result = await db.getFirstAsync<{ user_version: number }>(
+    "PRAGMA user_version"
+  );
+  let currentDbVersion = result?.user_version ?? 0;
+
+  // don't migrate if latest version
+  if (currentDbVersion >= DATABASE_VERSION) {
+    return;
+  }
+
+  // first migration
+  if (currentDbVersion === 0) {
+    await db.execAsync(`
+PRAGMA journal_mode = 'wal';
+CREATE TABLE todos (id INTEGER PRIMARY KEY NOT NULL, value TEXT NOT NULL, intValue INTEGER);
+`);
+    await db.runAsync(
+      "INSERT INTO todos (value, intValue) VALUES (?, ?)",
+      "hello",
+      1
+    );
+    await db.runAsync(
+      "INSERT INTO todos (value, intValue) VALUES (?, ?)",
+      "world",
+      2
+    );
+    currentDbVersion = 1;
+  }
+
+  // prepare for the next migration
+  // if (currentDbVersion === 1) {
+  //   currentDbVersion = 2;
+  // }
+
+  await db.execAsync(`PRAGMA user_version = ${DATABASE_VERSION}`);
 }
