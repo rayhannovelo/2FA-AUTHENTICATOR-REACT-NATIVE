@@ -1,0 +1,52 @@
+import { useEffect, useState } from "react";
+import { View } from "react-native";
+import AnimatedProgressWheel from "react-native-progress-wheel";
+import { Text } from "~/components/ui/text";
+import { Separator } from "~/components/ui/separator";
+import { authenticator } from "~/lib/authenticator";
+
+export function Token({
+  value,
+}: {
+  value: { issuer: string; account: string; secret: string };
+}) {
+  const [timeRemaining, settimeRemaining] = useState(
+    authenticator.timeRemaining()
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const timeRemaining = authenticator.timeRemaining();
+      settimeRemaining(timeRemaining);
+    }, 75);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <View className="flex">
+      <Text className="text-lg font-medium">
+        {value.issuer}: {value.account}
+      </Text>
+      <View className="flex flex-row justify-between items-center">
+        <Text className="text-5xl text-info leading-tight">
+          {authenticator.generate(value.secret).replace(/(.{3})/g, "$1 ")}
+        </Text>
+        <View style={{ transform: [{ scaleX: -1 }] }}>
+          <AnimatedProgressWheel
+            size={38}
+            width={20}
+            color={"white"}
+            backgroundColor={"#0088CC"}
+            containerColor={"white"}
+            max={30}
+            progress={timeRemaining}
+            rotation={"-90deg"}
+            duration={0}
+          />
+        </View>
+      </View>
+      <Separator className="my-1" />
+    </View>
+  );
+}

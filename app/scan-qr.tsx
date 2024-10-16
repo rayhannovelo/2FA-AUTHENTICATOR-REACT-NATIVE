@@ -6,9 +6,7 @@ import { router } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useSQLiteContext } from "expo-sqlite";
 
-import { Authenticator } from "@otplib/core";
-import { keyDecoder, keyEncoder } from "@otplib/plugin-thirty-two";
-import { createDigest, createRandomBytes } from "@otplib/plugin-crypto-js";
+import { authenticator } from "~/lib/authenticator";
 import otpauthUriParser from "otpauth-uri-parser";
 
 import { Button } from "~/components/ui/button";
@@ -65,14 +63,6 @@ export default function ScanQR() {
       setOpenAlertWarning(true);
       return false;
     }
-
-    // define authenticator
-    const authenticator = new Authenticator({
-      createDigest,
-      createRandomBytes,
-      keyDecoder,
-      keyEncoder,
-    });
 
     // generate token
     const token = authenticator.generate(secret);

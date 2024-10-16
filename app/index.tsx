@@ -5,7 +5,11 @@ import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
+import { Token } from "~/components/Token";
 import { Separator } from "~/components/ui/separator";
+import { QrCode } from "~/lib/icons/QrCode";
+import { Trash } from "~/lib/icons/Trash";
+import { authenticator } from "~/lib/authenticator";
 
 type TwoFa = {
   id: number;
@@ -16,34 +20,9 @@ type TwoFa = {
   created_at: string;
 };
 
-type Table = {
-  name: string;
-};
-
 export default function Index() {
   const db = useSQLiteContext();
-
-  const [sqliteVersion, setSqliteVersion] = useState("");
-  const [migrationVersion, setMigrationVersion] = useState(0);
-  const [tables, setTables] = useState<Table[]>();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
-
-  const dbInfo = async () => {
-    const result = await db.getFirstAsync<{ "sqlite_version()": string }>(
-      "SELECT sqlite_version()"
-    );
-    setSqliteVersion(result ? result["sqlite_version()"] : "Unknown Version");
-
-    const resultMigration = await db.getFirstAsync<{ user_version: number }>(
-      "PRAGMA user_version"
-    );
-    setMigrationVersion(resultMigration?.user_version ?? 0);
-
-    const tables = await db.getAllAsync<Table>(
-      "SELECT name FROM sqlite_master WHERE type='table'"
-    );
-    setTables(tables);
-  };
 
   const getTwoFas = async () => {
     const twoFas = await db.getAllAsync<TwoFa>("SELECT * FROM two_fas");
@@ -52,59 +31,48 @@ export default function Index() {
 
   const deleteTwoFas = async () => {
     await db.runAsync("DELETE FROM two_fas");
-
     getTwoFas();
   };
 
   useFocusEffect(
     useCallback(() => {
       getTwoFas();
-
-      return () => {};
-    }, [])
+    }, [getTwoFas])
   );
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      console.log("a");
+      if (authenticator.timeRemaining() === 30) {
+        getTwoFas();
+      }
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [getTwoFas]);
 
   return (
-    <View className="flex-1 justify-start items-center gap-4 pt-6 px-4 ">
-      {/* <Text>SQLite version: {sqliteVersion}</Text>
-      <Text>Migration version: {migrationVersion}</Text>
-      <Text>Table List</Text>
-      {tables &&
-        tables.map((value, key) => {
-          return <Text key={key}>{value.name}</Text>;
-        })} */}
-      {/* <Link href="/camera" asChild>
-        <Button className="w-2/3">
-          <Text>Camera</Text>
-        </Button>
-      </Link> */}
+    <View className="flex-1 justify-start items-center gap-4 pt-6">
       <Link href="/scan-qr" asChild>
-        <Button className="w-2/3">
+        <Button className="flex flex-row gap-2 w-3/5">
+          <QrCode className="text-background" />
           <Text>Scan a QR Code</Text>
         </Button>
       </Link>
-
-      <Button variant="destructive" className="w-2/3" onPress={deleteTwoFas}>
+      <Button
+        variant="destructive"
+        className="flex flex-row gap-2 w-3/5"
+        onPress={deleteTwoFas}
+      >
+        <Trash className="text-white" />
         <Text>Delete All Token</Text>
       </Button>
-
-      <Separator className="mt-4" />
-      <ScrollView className=" w-full">
-        {twoFas?.map((value, key) => {
-          return (
-            <View key={key} className="flex gap-2">
-              <Text className="text-lg font-medium">
-                {value.issuer}: {value.account}
-              </Text>
-              <View className="flex flex-row justify-between items-center">
-                <Text className="text-5xl text-info">123456</Text>
-                <Text>Circle</Text>
-              </View>
-              <Separator className="my-2" />
-            </View>
-          );
+      <View className="w-full px-4">
+        <Separator />
+      </View>
+      <ScrollView className="w-full px-4">
+        {twoFas?.map((value) => {
+          return <Token key={value.id} value={value} />;
         })}
       </ScrollView>
     </View>
