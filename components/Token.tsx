@@ -36,9 +36,8 @@ export function Token({
           <AnimatedProgressWheel
             size={38}
             width={20}
-            color={"white"}
-            backgroundColor={"#0088CC"}
-            containerColor={"white"}
+            color={"#0088CC"}
+            backgroundColor={"white"}
             max={30}
             progress={timeRemaining}
             rotation={"-90deg"}
