@@ -77,7 +77,9 @@ export default function ScanQR() {
         barcodeScannerSettings={{
           barcodeTypes: ["qr"],
         }}
-      ></CameraView>
+      >
+        <View className="w-72 h-72 border-4 border-green-400"></View>
+      </CameraView>
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -104,5 +106,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
     width: "100%",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
