@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { View, TouchableOpacity, ScrollView } from "react-native";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
@@ -25,6 +25,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Token } from "~/components/Token";
 import { QrCode } from "~/lib/icons/QrCode";
+import { Plus } from "~/lib/icons/Plus";
 import { Trash } from "~/lib/icons/Trash";
 import { authenticator } from "~/lib/authenticator";
 
@@ -123,11 +124,6 @@ export default function Index() {
     setTwoFas(twoFas);
   };
 
-  const deleteTwoFas = async () => {
-    await db.runAsync("DELETE FROM two_fas");
-    getTwoFas();
-  };
-
   const deleteTwoFa = async (id: number) => {
     await db.runAsync("DELETE FROM two_fas WHERE id = $id", {
       $id: id,
@@ -153,23 +149,15 @@ export default function Index() {
 
   return (
     <View className="flex-1 justify-start items-center gap-4 pt-6">
-      <Link href="/scan-qr" asChild>
-        <Button className="flex flex-row gap-2 w-3/5">
-          <QrCode className="text-background" />
-          <Text>Scan a QR Code</Text>
-        </Button>
-      </Link>
-      <Button
-        variant="destructive"
-        className="flex flex-row gap-2 w-3/5"
-        onPress={deleteTwoFas}
+      <TouchableOpacity
+        className="absolute z-10 bottom-16 right-8 w-16 h-16 bg-primary rounded-xl items-center justify-center"
+        onPress={() => router.push("/scan-qr")}
       >
-        <Trash className="text-white" />
-        <Text>Remove All Account</Text>
-      </Button>
+        <Plus className="text-primary-foreground" size={40} />
+      </TouchableOpacity>
       <View className="w-full px-4">
         <Input
-          placeholder="Search.."
+          placeholder="Search..."
           value={search}
           onChangeText={(value) => {
             setSearch(value);
@@ -180,7 +168,7 @@ export default function Index() {
       </View>
       <ScrollView className="w-full">
         <GestureHandlerRootView>
-          {twoFas?.map((value, key) => {
+          {twoFas?.map((value) => {
             return (
               <ReanimatedSwipeable
                 key={value.id}
