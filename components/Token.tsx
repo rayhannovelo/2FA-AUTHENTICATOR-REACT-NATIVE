@@ -18,7 +18,7 @@ export function Token({
     const interval = setInterval(() => {
       const timeRemaining = authenticator.timeRemaining();
       settimeRemaining(timeRemaining);
-    }, 75);
+    }, 50);
 
     return () => clearInterval(interval);
   }, []);

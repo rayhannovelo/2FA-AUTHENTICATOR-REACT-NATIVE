@@ -12,17 +12,25 @@ import Reanimated, {
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { Token } from "~/components/Token";
-import { Separator } from "~/components/ui/separator";
 import { QrCode } from "~/lib/icons/QrCode";
 import { Trash } from "~/lib/icons/Trash";
 import { authenticator } from "~/lib/authenticator";
 
-interface RightActionProps {
+type TwoFa = {
+  id: number;
+  reference_id: string;
+  issuer: string;
+  account: string;
+  secret: string;
+  created_at: string;
+};
+
+type RightActionProps = {
   prog: SharedValue<number>;
   drag: SharedValue<number>;
-  id: number; // Add the id prop
+  id: number;
   deleteTwoFa: (id: number) => void;
-}
+};
 
 function RightAction({ prog, drag, id, deleteTwoFa }: RightActionProps) {
   const styleAnimation = useAnimatedStyle(() => {
@@ -45,15 +53,6 @@ function RightAction({ prog, drag, id, deleteTwoFa }: RightActionProps) {
     </Reanimated.View>
   );
 }
-
-type TwoFa = {
-  id: number;
-  reference_id: string;
-  issuer: string;
-  account: string;
-  secret: string;
-  created_at: string;
-};
 
 export default function Index() {
   const db = useSQLiteContext();

@@ -1,14 +1,8 @@
-global.Buffer = global.Buffer || require("buffer").Buffer;
-
 import { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { useSQLiteContext } from "expo-sqlite";
-
-import { authenticator } from "~/lib/authenticator";
-import otpauthUriParser from "otpauth-uri-parser";
-
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import {
@@ -21,6 +15,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
+import { authenticator } from "~/lib/authenticator";
+import otpauthUriParser from "otpauth-uri-parser";
 
 export default function ScanQR() {
   const db = useSQLiteContext();
