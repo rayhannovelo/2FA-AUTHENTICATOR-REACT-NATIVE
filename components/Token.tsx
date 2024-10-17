@@ -46,6 +46,7 @@ export function Token({
           />
         </View>
       </View>
+      <Separator />
     </View>
   );
 }

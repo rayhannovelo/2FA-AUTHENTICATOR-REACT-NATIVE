@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { View, ScrollView, StyleSheet } from "react-native";
-import { Link, router } from "expo-router";
+import { View, ScrollView } from "react-native";
+import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
@@ -78,7 +78,7 @@ export default function Index() {
   useFocusEffect(
     useCallback(() => {
       getTwoFas();
-    }, [getTwoFas])
+    }, [])
   );
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export default function Index() {
     }, 30000);
 
     return () => clearInterval(interval);
-  }, [getTwoFas]);
+  }, []);
 
   return (
     <View className="flex-1 justify-start items-center gap-4 pt-6">
@@ -125,9 +125,7 @@ export default function Index() {
                   />
                 )}
               >
-                {key == 0 && <Separator />}
                 <Token key={value.id} value={value} />
-                <Separator className="mt-1" />
               </ReanimatedSwipeable>
             );
           })}
