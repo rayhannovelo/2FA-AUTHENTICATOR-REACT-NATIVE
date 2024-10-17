@@ -9,6 +9,7 @@ import Reanimated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { useDebouncedCallback } from "use-debounce";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import {
@@ -21,11 +22,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
+import { Input } from "~/components/ui/input";
 import { Token } from "~/components/Token";
 import { QrCode } from "~/lib/icons/QrCode";
 import { Trash } from "~/lib/icons/Trash";
 import { authenticator } from "~/lib/authenticator";
-import { TriangleAlert } from "~/lib/icons/TriangleAlert";
 
 type TwoFa = {
   id: number;
@@ -105,9 +106,20 @@ function RightAction({
 export default function Index() {
   const db = useSQLiteContext();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
+  const [search, setSearch] = useState("");
+
+  const handleSearch = useDebouncedCallback(() => {
+    getTwoFas();
+  }, 300);
 
   const getTwoFas = async () => {
-    const twoFas = await db.getAllAsync<TwoFa>("SELECT * FROM two_fas");
+    const query = search
+      ? "SELECT * FROM two_fas WHERE issuer LIKE ? OR account LIKE ?"
+      : "SELECT * FROM two_fas";
+
+    const params = search ? [`%${search}%`, `%${search}%`] : [];
+
+    const twoFas = await db.getAllAsync<TwoFa>(query, params);
     setTwoFas(twoFas);
   };
 
@@ -155,6 +167,17 @@ export default function Index() {
         <Trash className="text-white" />
         <Text>Remove All Account</Text>
       </Button>
+      <View className="w-full px-4">
+        <Input
+          placeholder="Search.."
+          value={search}
+          onChangeText={(value) => {
+            setSearch(value);
+            handleSearch();
+          }}
+          defaultValue=""
+        />
+      </View>
       <ScrollView className="w-full">
         <GestureHandlerRootView>
           {twoFas?.map((value, key) => {
