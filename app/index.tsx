@@ -150,7 +150,7 @@ export default function Index() {
   return (
     <View className="flex-1 justify-start items-center gap-4 pt-6">
       <TouchableOpacity
-        className="absolute z-10 bottom-16 right-8 w-16 h-16 bg-primary rounded-xl items-center justify-center"
+        className="absolute z-10 bottom-16 right-8 w-16 h-16 bg-primary rounded-xl items-center justify-center shadow-md dark:shadow-slate-100"
         onPress={() => router.push("/scan-qr")}
       >
         <Plus className="text-primary-foreground" size={40} />
