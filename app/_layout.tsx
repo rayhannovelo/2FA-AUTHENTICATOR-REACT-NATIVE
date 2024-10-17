@@ -118,7 +118,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
       PRAGMA journal_mode = 'wal';
       CREATE TABLE IF NOT EXISTS two_fas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        reference_id TEXT NOT NULL,
+        reference_id TEXT NULL,
         secret TEXT NOT NULL,
         issuer TEXT NOT NULL,
         account TEXT NOT NULL,
