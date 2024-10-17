@@ -137,16 +137,6 @@ export default function Index() {
     }, [])
   );
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (authenticator.timeRemaining() === 30) {
-        getTwoFas();
-      }
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
     <View className="flex-1 justify-start items-center gap-4 pt-6">
       <TouchableOpacity
