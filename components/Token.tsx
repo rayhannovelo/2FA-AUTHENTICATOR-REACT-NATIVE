@@ -24,11 +24,11 @@ export function Token({
   }, []);
 
   return (
-    <View className="flex">
+    <View className="flex px-4 mt-1">
       <Text className="text-lg font-medium">
         {value.issuer}: {value.account}
       </Text>
-      <View className="flex flex-row justify-between items-center">
+      <View className="flex flex-row justify-between items-center pr-4">
         <Text className="text-5xl text-info leading-tight">
           {authenticator.generate(value.secret).replace(/(.{3})/g, "$1 ")}
         </Text>
@@ -46,7 +46,6 @@ export function Token({
           />
         </View>
       </View>
-      <Separator className="my-1" />
     </View>
   );
 }

@@ -1,8 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { View, ScrollView } from "react-native";
-import { Link } from "expo-router";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import Reanimated, {
+  SharedValue,
+  useAnimatedStyle,
+} from "react-native-reanimated";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 import { Token } from "~/components/Token";
@@ -10,6 +16,35 @@ import { Separator } from "~/components/ui/separator";
 import { QrCode } from "~/lib/icons/QrCode";
 import { Trash } from "~/lib/icons/Trash";
 import { authenticator } from "~/lib/authenticator";
+
+interface RightActionProps {
+  prog: SharedValue<number>;
+  drag: SharedValue<number>;
+  id: number; // Add the id prop
+  deleteTwoFa: (id: number) => void;
+}
+
+function RightAction({ prog, drag, id, deleteTwoFa }: RightActionProps) {
+  const styleAnimation = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: drag.value + 75 }],
+    };
+  });
+
+  return (
+    <Reanimated.View style={styleAnimation}>
+      <View className="w-[75px] bg-red-500 h-full flex justify-center items-center">
+        <Button
+          variant="destructive"
+          className="flex flex-row gap-2 w-3/5"
+          onPress={() => deleteTwoFa(id)}
+        >
+          <Trash className="text-white" />
+        </Button>
+      </View>
+    </Reanimated.View>
+  );
+}
 
 type TwoFa = {
   id: number;
@@ -34,6 +69,12 @@ export default function Index() {
     getTwoFas();
   };
 
+  const deleteTwoFa = async (id: number) => {
+    await db.runAsync("DELETE FROM two_fas WHERE id = $id", {
+      $id: id,
+    });
+  };
+
   useFocusEffect(
     useCallback(() => {
       getTwoFas();
@@ -42,7 +83,6 @@ export default function Index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      console.log("a");
       if (authenticator.timeRemaining() === 30) {
         getTwoFas();
       }
@@ -67,13 +107,31 @@ export default function Index() {
         <Trash className="text-white" />
         <Text>Delete All Token</Text>
       </Button>
-      <View className="w-full px-4">
-        <Separator />
-      </View>
-      <ScrollView className="w-full px-4">
-        {twoFas?.map((value) => {
-          return <Token key={value.id} value={value} />;
-        })}
+      <ScrollView className="w-full">
+        <GestureHandlerRootView>
+          {twoFas?.map((value, key) => {
+            return (
+              <ReanimatedSwipeable
+                key={value.id}
+                friction={2}
+                enableTrackpadTwoFingerGesture
+                rightThreshold={40}
+                renderRightActions={(prog, drag) => (
+                  <RightAction
+                    prog={prog}
+                    drag={drag}
+                    id={value.id}
+                    deleteTwoFa={deleteTwoFa}
+                  />
+                )}
+              >
+                {key == 0 && <Separator />}
+                <Token key={value.id} value={value} />
+                <Separator className="mt-1" />
+              </ReanimatedSwipeable>
+            );
+          })}
+        </GestureHandlerRootView>
       </ScrollView>
     </View>
   );
