@@ -145,7 +145,7 @@ export default function Index() {
       >
         <Plus className="text-primary-foreground" size={40} />
       </TouchableOpacity>
-      <View className="w-full px-4">
+      <View className="w-full px-5">
         <Input
           placeholder="Search..."
           value={search}

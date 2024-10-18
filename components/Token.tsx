@@ -24,7 +24,7 @@ export function Token({
   }, []);
 
   return (
-    <View className="flex px-4 mt-1">
+    <View className="flex px-5 mt-1">
       <Text className="text-lg font-medium">
         {value.issuer}: {value.account}
       </Text>
