@@ -10,6 +10,7 @@ import Reanimated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
+import { useColorScheme as useNativewindColorScheme } from "nativewind";
 import { useDebouncedCallback } from "use-debounce";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
@@ -106,6 +107,8 @@ function RightAction({
 
 export default function Index() {
   const db = useSQLiteContext();
+
+  const { colorScheme } = useNativewindColorScheme();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
   const [search, setSearch] = useState("");
 
@@ -184,12 +187,19 @@ export default function Index() {
     </View>
   ) : (
     <View className="flex-1 justify-center items-center gap-4">
-      <Image
-        source={require("../assets/images/cat.png")}
-        style={styles.image}
-        contentFit="cover"
-        transition={500}
-      />
+      {colorScheme === "dark" ? (
+        <Image
+          source={require(`../assets/images/cat-dark.svg`)}
+          style={styles.imageDark}
+          cachePolicy={"memory-disk"}
+        />
+      ) : (
+        <Image
+          source={require(`../assets/images/cat.svg`)}
+          style={styles.image}
+          cachePolicy={"memory-disk"}
+        />
+      )}
       <Text className="text-center px-8">
         Looks like there aren't any PPI Authenticator codes here yet.
       </Text>
@@ -204,13 +214,14 @@ export default function Index() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
   image: {
     width: 200, // Adjust width as needed
     height: 200, // Adjust height as needed
+    backgroundColor: "white",
+  },
+  imageDark: {
+    width: 200, // Adjust width as needed
+    height: 200, // Adjust height as needed
+    backgroundColor: "white",
   },
 });
