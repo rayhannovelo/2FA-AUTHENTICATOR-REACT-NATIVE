@@ -190,7 +190,7 @@ export default function Index() {
       {colorScheme === "dark" ? (
         <Image
           source={require(`../assets/images/cat-dark.svg`)}
-          style={styles.imageDark}
+          style={styles.image}
           cachePolicy={"memory-disk"}
         />
       ) : (
@@ -215,13 +215,9 @@ export default function Index() {
 
 const styles = StyleSheet.create({
   image: {
-    width: 200, // Adjust width as needed
-    height: 200, // Adjust height as needed
+    width: 200,
+    height: 200,
     backgroundColor: "white",
-  },
-  imageDark: {
-    width: 200, // Adjust width as needed
-    height: 200, // Adjust height as needed
-    backgroundColor: "white",
+    borderRadius: 100,
   },
 });
