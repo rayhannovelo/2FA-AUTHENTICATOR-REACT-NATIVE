@@ -10,14 +10,14 @@ export function Token({
 }: {
   value: { issuer: string; account: string; secret: string };
 }) {
-  const [timeRemaining, settimeRemaining] = useState(
+  const [timeRemaining, setTimeRemaining] = useState(
     authenticator.timeRemaining()
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       const timeRemaining = authenticator.timeRemaining();
-      settimeRemaining(timeRemaining);
+      setTimeRemaining(timeRemaining);
     }, 50);
 
     return () => clearInterval(interval);
