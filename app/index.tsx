@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { View, TouchableOpacity, ScrollView } from "react-native";
+import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
+import { Image } from "expo-image";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Reanimated, {
@@ -24,10 +25,9 @@ import {
 } from "~/components/ui/alert-dialog";
 import { Input } from "~/components/ui/input";
 import { Token } from "~/components/Token";
-import { QrCode } from "~/lib/icons/QrCode";
 import { Plus } from "~/lib/icons/Plus";
 import { Trash } from "~/lib/icons/Trash";
-import { authenticator } from "~/lib/authenticator";
+import { QrCode } from "~/lib/icons/QrCode";
 
 type TwoFa = {
   id: number;
@@ -137,7 +137,7 @@ export default function Index() {
     }, [])
   );
 
-  return (
+  return twoFas?.length ? (
     <View className="flex-1 justify-start items-center gap-4 pt-6">
       <TouchableOpacity
         className="absolute z-10 bottom-16 right-8 w-16 h-16 bg-primary rounded-xl items-center justify-center shadow-md dark:shadow-slate-100"
@@ -182,5 +182,35 @@ export default function Index() {
         </GestureHandlerRootView>
       </ScrollView>
     </View>
+  ) : (
+    <View className="flex-1 justify-center items-center gap-4">
+      <Image
+        source={require("../assets/images/cat.png")}
+        style={styles.image}
+        contentFit="cover"
+        transition={500}
+      />
+      <Text className="text-center px-8">
+        Looks like there aren't any PPI Authenticator codes here yet.
+      </Text>
+      <Link href="/scan-qr" asChild>
+        <Button className="flex flex-row gap-4 w-4/5 rounded-full">
+          <QrCode className="text-background" />
+          <Text>Scan QrCode</Text>
+        </Button>
+      </Link>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: 200, // Adjust width as needed
+    height: 200, // Adjust height as needed
+  },
+});
