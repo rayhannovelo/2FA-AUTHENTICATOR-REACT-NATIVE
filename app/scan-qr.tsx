@@ -32,7 +32,7 @@ export default function ScanQR() {
   if (!permission.granted) {
     // Camera permissions are not granted yet.
     return (
-      <View className="flex-1 justify-center items-center ">
+      <View className="flex-1 justify-center items-center gap-2">
         <Text>We need your permission to show the camera</Text>
         <Button onPress={requestPermission} className="w-2/3">
           <Text>Grant Access</Text>

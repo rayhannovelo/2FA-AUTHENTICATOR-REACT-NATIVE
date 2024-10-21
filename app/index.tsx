@@ -186,7 +186,7 @@ export default function Index() {
       </ScrollView>
     </View>
   ) : (
-    <View className="flex-1 justify-center items-center gap-4">
+    <View className="flex-1 justify-center items-center">
       {colorScheme === "dark" ? (
         <Image
           source={require(`../assets/images/cat-dark.svg`)}
@@ -200,13 +200,13 @@ export default function Index() {
           cachePolicy={"memory-disk"}
         />
       )}
-      <Text className="text-center px-8">
-        Looks like there aren't any PPI Authenticator codes here yet.
+      <Text className="text-center px-8 mb-4">
+        No PPI Authenticator codes here yet.
       </Text>
       <Link href="/scan-qr" asChild>
         <Button className="flex flex-row gap-4 w-4/5 rounded-full">
           <QrCode className="text-background" />
-          <Text>Scan QrCode</Text>
+          <Text>Scan QR Code</Text>
         </Button>
       </Link>
     </View>
