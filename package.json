@@ -1,5 +1,5 @@
 {
-  "name": "2fa-ppi-authenticator",
+  "name": "ppi-authenticator",
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {

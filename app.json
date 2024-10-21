@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "2FA PPI AUTHENTICATOR",
-    "slug": "2fa-ppi-authenticator",
+    "name": "PPI AUTHENTICATOR",
+    "slug": "ppi-authenticator",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
