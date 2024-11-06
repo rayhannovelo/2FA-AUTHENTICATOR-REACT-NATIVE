@@ -29,6 +29,7 @@ import { Token } from "~/components/Token";
 import { Plus } from "~/lib/icons/Plus";
 import { Trash } from "~/lib/icons/Trash";
 import { QrCode } from "~/lib/icons/QrCode";
+import GoogleSignIn from "~/components/GoogleSignIn";
 
 type TwoFa = {
   id: number;
@@ -204,11 +205,12 @@ export default function Index() {
         No PPI Authenticator codes here yet.
       </Text>
       <Link href="/scan-qr" asChild>
-        <Button className="flex flex-row gap-4 w-4/5 rounded-full">
+        <Button className="flex flex-row gap-4 w-4/5 rounded-full mb-4">
           <QrCode className="text-background" />
           <Text>Scan QR Code</Text>
         </Button>
       </Link>
+      <GoogleSignIn />
     </View>
   );
 }
