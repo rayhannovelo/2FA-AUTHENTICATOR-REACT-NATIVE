@@ -4,7 +4,6 @@ import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { Image } from "expo-image";
-// import * as SecureStore from "expo-secure-store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Reanimated, {
@@ -31,18 +30,7 @@ import { Plus } from "~/lib/icons/Plus";
 import { Trash } from "~/lib/icons/Trash";
 import { QrCode } from "~/lib/icons/QrCode";
 import GoogleSignIn from "~/components/GoogleSignIn";
-// import { Code } from "~/components/ui/typography";
-
-// function getValueFor(key: string) {
-//   let result = SecureStore.getItem(key);
-//   console.log("user", result);
-//   return result ? result : "No Value";
-// }
-
-// function getSession() {
-//   const result = SecureStore.getItem("user");
-//   return result ? { isLogin: true, ...JSON.parse(result) } : { isLogin: false };
-// }
+import { useSession } from "../ctx/session";
 
 type TwoFa = {
   id: number;
@@ -121,6 +109,7 @@ function RightAction({
 
 export default function Index() {
   const db = useSQLiteContext();
+  const { session, isLoading, signOut } = useSession();
 
   const { colorScheme } = useNativewindColorScheme();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
@@ -223,7 +212,17 @@ export default function Index() {
           <Text>Scan QR Code</Text>
         </Button>
       </Link>
-      <GoogleSignIn />
+      {session ? (
+        <Button
+          variant="destructive"
+          className="flex flex-row gap-4 w-4/5 rounded-full mb-4"
+          onPress={() => signOut()}
+        >
+          <Text>Sign Out</Text>
+        </Button>
+      ) : (
+        <GoogleSignIn />
+      )}
     </View>
   );
 }

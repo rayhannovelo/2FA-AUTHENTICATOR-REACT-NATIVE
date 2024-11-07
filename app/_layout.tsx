@@ -12,6 +12,7 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import { PortalHost } from "@rn-primitives/portal";
 import { ThemeToggle } from "~/components/ThemeToggle";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
+import { SessionProvider } from "../ctx/session";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -65,35 +66,37 @@ export default function RootLayout() {
   }
 
   return (
-    <SQLiteProvider databaseName="2fa.db" onInit={migrateDbIfNeeded}>
-      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen
-            name="index"
-            options={{
-              title: "PPI AUTHENTICATOR",
-              headerRight: () => <ThemeToggle />,
-            }}
-          />
-          <Stack.Screen
-            name="camera"
-            options={{
-              title: "Camera",
-              headerBackTitle: "Back",
-            }}
-          />
-          <Stack.Screen
-            name="scan-qr"
-            options={{
-              title: "Scan QR",
-              headerBackTitle: "Back",
-            }}
-          />
-        </Stack>
-        <PortalHost />
-      </ThemeProvider>
-    </SQLiteProvider>
+    <SessionProvider>
+      <SQLiteProvider databaseName="2fa.db" onInit={migrateDbIfNeeded}>
+        <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+          <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+          <Stack>
+            <Stack.Screen
+              name="index"
+              options={{
+                title: "PPI AUTHENTICATOR",
+                headerRight: () => <ThemeToggle />,
+              }}
+            />
+            <Stack.Screen
+              name="camera"
+              options={{
+                title: "Camera",
+                headerBackTitle: "Back",
+              }}
+            />
+            <Stack.Screen
+              name="scan-qr"
+              options={{
+                title: "Scan QR",
+                headerBackTitle: "Back",
+              }}
+            />
+          </Stack>
+          <PortalHost />
+        </ThemeProvider>
+      </SQLiteProvider>
+    </SessionProvider>
   );
 }
 
