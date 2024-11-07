@@ -1,19 +1,19 @@
-import { useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { Image } from "expo-image";
+import { useColorScheme as useNativewindColorScheme } from "nativewind";
+import { useCallback, useState } from "react";
+import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Reanimated, {
   SharedValue,
   useAnimatedStyle,
 } from "react-native-reanimated";
-import { useColorScheme as useNativewindColorScheme } from "nativewind";
 import { useDebouncedCallback } from "use-debounce";
-import { Button } from "~/components/ui/button";
-import { Text } from "~/components/ui/text";
+import GoogleSignIn from "~/components/GoogleSignIn";
+import { Token } from "~/components/Token";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,12 +24,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "~/components/ui/alert-dialog";
+import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { Token } from "~/components/Token";
+import { Text } from "~/components/ui/text";
 import { Plus } from "~/lib/icons/Plus";
-import { Trash } from "~/lib/icons/Trash";
 import { QrCode } from "~/lib/icons/QrCode";
-import GoogleSignIn from "~/components/GoogleSignIn";
+import { Trash } from "~/lib/icons/Trash";
+
 import { useSession } from "../ctx/session";
 
 type TwoFa = {
@@ -109,7 +110,7 @@ function RightAction({
 
 export default function Index() {
   const db = useSQLiteContext();
-  const { session, isLoading, signOut } = useSession();
+  const { session, signOut } = useSession();
 
   const { colorScheme } = useNativewindColorScheme();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
@@ -119,7 +120,7 @@ export default function Index() {
     getTwoFas();
   }, 300);
 
-  const getTwoFas = async () => {
+  const getTwoFas = useCallback(async () => {
     const query = search
       ? "SELECT * FROM two_fas WHERE issuer LIKE ? OR account LIKE ?"
       : "SELECT * FROM two_fas";
@@ -128,7 +129,7 @@ export default function Index() {
 
     const twoFas = await db.getAllAsync<TwoFa>(query, params);
     setTwoFas(twoFas);
-  };
+  }, [db, search]);
 
   const deleteTwoFa = async (id: number) => {
     await db.runAsync("DELETE FROM two_fas WHERE id = $id", {
@@ -140,7 +141,7 @@ export default function Index() {
   useFocusEffect(
     useCallback(() => {
       getTwoFas();
-    }, [])
+    }, [getTwoFas]),
   );
 
   return twoFas?.length ? (

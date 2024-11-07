@@ -1,13 +1,14 @@
-import { useContext, createContext, type PropsWithChildren } from "react";
-import { Platform } from "react-native";
-import { useStorageState } from "./useStorageState";
 import {
   GoogleSignin,
-  statusCodes,
-  isSuccessResponse,
   isErrorWithCode,
+  isSuccessResponse,
+  statusCodes,
 } from "@react-native-google-signin/google-signin";
 import axios from "axios";
+import { type PropsWithChildren, createContext, useContext } from "react";
+import { Platform } from "react-native";
+
+import { useStorageState } from "./useStorageState";
 
 const AuthContext = createContext<{
   signIn: () => void;
@@ -63,7 +64,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
                     headers: {
                       Accept: "application/json, application/vnd.api+json",
                     },
-                  }
+                  },
                 )
                 .then(async function (response) {
                   console.log("response", response.data.data);
@@ -87,7 +88,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
                   // Android only, play services not available or outdated
                   console.log(
-                    "Android only, play services not available or outdated"
+                    "Android only, play services not available or outdated",
                   );
                   break;
                 default:
@@ -97,7 +98,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
             } else {
               // an error that's not related to google sign in occurred
               console.log(
-                "an error that's not related to google sign in occurred"
+                "an error that's not related to google sign in occurred",
               );
             }
           }

@@ -1,17 +1,17 @@
-import "~/global.css";
-
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
+import { PortalHost } from "@rn-primitives/portal";
 import { SplashScreen, Stack } from "expo-router";
+import { type SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
-import { SQLiteProvider, type SQLiteDatabase } from "expo-sqlite";
 import * as React from "react";
 import { Platform } from "react-native";
+import { ThemeToggle } from "~/components/ThemeToggle";
+import "~/global.css";
+import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
-import { PortalHost } from "@rn-primitives/portal";
-import { ThemeToggle } from "~/components/ThemeToggle";
-import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
+
 import { SessionProvider } from "../ctx/session";
 
 const LIGHT_THEME: Theme = {
@@ -59,7 +59,7 @@ export default function RootLayout() {
     })().finally(() => {
       SplashScreen.hideAsync();
     });
-  }, []);
+  }, [colorScheme, setColorScheme]);
 
   if (!isColorSchemeLoaded) {
     return null;
@@ -106,7 +106,7 @@ async function migrateDbIfNeeded(db: SQLiteDatabase) {
 
   // get current version
   const result = await db.getFirstAsync<{ user_version: number }>(
-    "PRAGMA user_version"
+    "PRAGMA user_version",
   );
   let currentDbVersion = result?.user_version ?? 0;
 

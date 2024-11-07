@@ -1,8 +1,6 @@
-import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
+import { CameraType, CameraView, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
-
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Link } from "expo-router";
+import { StyleSheet, View } from "react-native";
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
