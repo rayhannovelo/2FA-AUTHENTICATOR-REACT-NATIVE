@@ -6,9 +6,14 @@ import {
 } from "@react-native-google-signin/google-signin";
 import { StyleSheet, Platform } from "react-native";
 import { Image } from "expo-image";
+import * as SecureStore from "expo-secure-store";
 import { Button } from "./ui/button";
 import { Text } from "~/components/ui/text";
 import axios from "axios";
+
+// async function save(key: string, value: any) {
+//   await SecureStore.setItemAsync(key, value);
+// }
 
 export default function () {
   GoogleSignin.configure({
@@ -40,8 +45,9 @@ export default function () {
                   },
                 }
               )
-              .then(function (response) {
-                console.log("response", response.data);
+              .then(async function (response) {
+                // console.log("response", response.data.data);
+                // save("user", JSON.stringify(response.data.data));
               })
               .catch(function (error) {
                 console.log("error", error.message);

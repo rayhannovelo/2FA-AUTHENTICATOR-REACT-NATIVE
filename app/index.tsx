@@ -4,6 +4,7 @@ import { View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { Image } from "expo-image";
+// import * as SecureStore from "expo-secure-store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ReanimatedSwipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 import Reanimated, {
@@ -30,6 +31,18 @@ import { Plus } from "~/lib/icons/Plus";
 import { Trash } from "~/lib/icons/Trash";
 import { QrCode } from "~/lib/icons/QrCode";
 import GoogleSignIn from "~/components/GoogleSignIn";
+// import { Code } from "~/components/ui/typography";
+
+// function getValueFor(key: string) {
+//   let result = SecureStore.getItem(key);
+//   console.log("user", result);
+//   return result ? result : "No Value";
+// }
+
+// function getSession() {
+//   const result = SecureStore.getItem("user");
+//   return result ? { isLogin: true, ...JSON.parse(result) } : { isLogin: false };
+// }
 
 type TwoFa = {
   id: number;
