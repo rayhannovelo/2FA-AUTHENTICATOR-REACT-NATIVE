@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { View } from "react-native";
 import AnimatedProgressWheel from "react-native-progress-wheel";
-import { Text } from "~/components/ui/text";
 import { Separator } from "~/components/ui/separator";
+import { Text } from "~/components/ui/text";
 import { authenticator } from "~/lib/authenticator";
 
 export function Token({
@@ -11,7 +11,7 @@ export function Token({
   value: { issuer: string; account: string; secret: string };
 }) {
   const [timeRemaining, setTimeRemaining] = useState(
-    authenticator.timeRemaining()
+    authenticator.timeRemaining(),
   );
 
   useEffect(() => {

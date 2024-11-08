@@ -29,6 +29,7 @@
     "@rn-primitives/tooltip": "~1.0.3",
     "@rn-primitives/types": "~1.0.3",
     "axios": "^1.7.7",
+    "caniuse-lite": "^1.0.30001678",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "~51.0.38",
