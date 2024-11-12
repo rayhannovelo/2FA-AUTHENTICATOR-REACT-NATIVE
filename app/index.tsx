@@ -132,7 +132,6 @@ export default function Index() {
           },
         })
         .then(async function (response) {
-          console.log("response get data", response.data.data);
           if (response.data.data) {
             setTwoFas(response.data.data);
           }
@@ -202,22 +201,13 @@ export default function Index() {
         />
       </View>
       {session ? (
-        <>
-          <Button
-            variant="outline"
-            className="flex flex-row gap-4 w-4/5 rounded-full"
-            onPress={() => getTwoFas()}
-          >
-            <Text>Refresh</Text>
-          </Button>
-          <Button
-            variant="destructive"
-            className="flex flex-row gap-4 w-4/5 rounded-full mb-4"
-            onPress={() => signOut()}
-          >
-            <Text>Sign Out</Text>
-          </Button>
-        </>
+        <Button
+          variant="destructive"
+          className="flex flex-row gap-4 w-4/5 rounded-full mb-4"
+          onPress={() => signOut()}
+        >
+          <Text>Sign Out</Text>
+        </Button>
       ) : (
         <GoogleSignIn />
       )}

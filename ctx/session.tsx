@@ -77,8 +77,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
                   },
                 )
                 .then(async function (response) {
-                  console.log("response", response.data.data);
-
                   // get local 2fa
                   const db = await SQLite.openDatabaseAsync("2fa.db");
                   const twoFas = await db.getAllAsync<TwoFa>(
@@ -87,7 +85,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
 
                   if (twoFas.length) {
                     const ids = twoFas.map((value) => value.reference_id);
-                    console.log(ids);
 
                     axios
                       .post(
@@ -101,9 +98,6 @@ export function SessionProvider({ children }: PropsWithChildren) {
                           },
                         },
                       )
-                      .then(async function (response) {
-                        console.log("response sync", response.data);
-                      })
                       .catch(function (error) {
                         console.log("error sync", error.message);
                       });
