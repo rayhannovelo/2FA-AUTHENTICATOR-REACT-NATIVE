@@ -1,3 +1,4 @@
+import axios from "axios";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
@@ -17,8 +18,11 @@ import {
 import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
 
+import { useSession } from "../ctx/session";
+
 export default function ScanQR() {
   const db = useSQLiteContext();
+  const { session } = useSession();
 
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
@@ -57,16 +61,37 @@ export default function ScanQR() {
       return false;
     }
 
-    // save to db
-    await db.runAsync(
-      "INSERT INTO two_fas (reference_id, secret, issuer, account) VALUES (?, ?, ?, ?)",
-      parsedData.query.referenceId,
-      parsedData.query.secret,
-      parsedData.query.issuer,
-      parsedData.label.account,
-    );
-
-    router.navigate("/");
+    if (session) {
+      // save to backend
+      axios
+        .post(
+          `${process.env.EXPO_PUBLIC_API_URL}/user-2fas`,
+          { referenceId: parsedData.query.referenceId },
+          {
+            headers: {
+              Accept: "application/json, application/vnd.api+json",
+              Authorization: `Bearer ${JSON.parse(session).user_token.token}`,
+            },
+          },
+        )
+        .then(async function (response) {
+          console.log("response get data", response.data);
+          router.navigate("/");
+        })
+        .catch(function (error) {
+          console.log("error get data", error.message);
+        });
+    } else {
+      // save to local
+      await db.runAsync(
+        "INSERT INTO two_fas (reference_id, secret, issuer, account) VALUES (?, ?, ?, ?)",
+        parsedData.query.referenceId,
+        parsedData.query.secret,
+        parsedData.query.issuer,
+        parsedData.label.account,
+      );
+      router.navigate("/");
+    }
   };
 
   return (

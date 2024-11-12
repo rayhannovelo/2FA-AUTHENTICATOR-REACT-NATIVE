@@ -1,4 +1,5 @@
 import { useFocusEffect } from "@react-navigation/native";
+import axios from "axios";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
@@ -121,21 +122,58 @@ export default function Index() {
   }, 300);
 
   const getTwoFas = useCallback(async () => {
-    const query = search
-      ? "SELECT * FROM two_fas WHERE issuer LIKE ? OR account LIKE ?"
-      : "SELECT * FROM two_fas";
+    if (session) {
+      // get data from backend
+      axios
+        .get(`${process.env.EXPO_PUBLIC_API_URL}/user-2fas`, {
+          headers: {
+            Accept: "application/json, application/vnd.api+json",
+            Authorization: `Bearer ${JSON.parse(session).user_token.token}`,
+          },
+        })
+        .then(async function (response) {
+          console.log("response get data", response.data.data);
+          if (response.data.data) {
+            setTwoFas(response.data.data);
+          }
+        })
+        .catch(function (error) {
+          console.log("error get data", error.message);
+        });
+    } else {
+      // get data from local
+      const query = search
+        ? "SELECT * FROM two_fas WHERE issuer LIKE ? OR account LIKE ?"
+        : "SELECT * FROM two_fas";
 
-    const params = search ? [`%${search}%`, `%${search}%`] : [];
-
-    const twoFas = await db.getAllAsync<TwoFa>(query, params);
-    setTwoFas(twoFas);
-  }, [db, search]);
+      const params = search ? [`%${search}%`, `%${search}%`] : [];
+      const twoFas = await db.getAllAsync<TwoFa>(query, params);
+      setTwoFas(twoFas);
+    }
+  }, [db, search, session]);
 
   const deleteTwoFa = async (id: number) => {
-    await db.runAsync("DELETE FROM two_fas WHERE id = $id", {
-      $id: id,
-    });
-    getTwoFas();
+    if (session) {
+      // delete data from backend
+      axios
+        .delete(`${process.env.EXPO_PUBLIC_API_URL}/user-2fas/${id}`, {
+          headers: {
+            Accept: "application/json, application/vnd.api+json",
+            Authorization: `Bearer ${JSON.parse(session).user_token.token}`,
+          },
+        })
+        .then(async function (response) {
+          getTwoFas();
+        })
+        .catch(function (error) {
+          console.log("error get data", error.message);
+        });
+    } else {
+      await db.runAsync("DELETE FROM two_fas WHERE id = $id", {
+        $id: id,
+      });
+      getTwoFas();
+    }
   };
 
   useFocusEffect(
@@ -163,6 +201,26 @@ export default function Index() {
           defaultValue=""
         />
       </View>
+      {session ? (
+        <>
+          <Button
+            variant="outline"
+            className="flex flex-row gap-4 w-4/5 rounded-full"
+            onPress={() => getTwoFas()}
+          >
+            <Text>Refresh</Text>
+          </Button>
+          <Button
+            variant="destructive"
+            className="flex flex-row gap-4 w-4/5 rounded-full mb-4"
+            onPress={() => signOut()}
+          >
+            <Text>Sign Out</Text>
+          </Button>
+        </>
+      ) : (
+        <GoogleSignIn />
+      )}
       <ScrollView className="w-full">
         <GestureHandlerRootView>
           {twoFas?.map((value) => {
