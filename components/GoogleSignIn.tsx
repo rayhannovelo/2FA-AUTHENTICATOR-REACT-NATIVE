@@ -1,9 +1,8 @@
 import { Image } from "expo-image";
 import { StyleSheet } from "react-native";
+import { Button } from "~/components/ui/button";
 import { Text } from "~/components/ui/text";
-
-import { useSession } from "../ctx/session";
-import { Button } from "./ui/button";
+import { useSession } from "~/ctx/session";
 
 export default function () {
   const { signIn } = useSession();

@@ -22,6 +22,7 @@
     "@react-navigation/native": "^6.0.2",
     "@rn-primitives/alert-dialog": "^1.0.5",
     "@rn-primitives/avatar": "~1.0.4",
+    "@rn-primitives/dropdown-menu": "^1.1.0",
     "@rn-primitives/portal": "~1.0.3",
     "@rn-primitives/progress": "~1.0.3",
     "@rn-primitives/separator": "^1.0.5",

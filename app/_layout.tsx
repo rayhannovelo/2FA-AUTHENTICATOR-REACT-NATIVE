@@ -6,13 +6,13 @@ import { type SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
 import { Platform } from "react-native";
+import { AccountMenu } from "~/components/AccountMenu";
 import { ThemeToggle } from "~/components/ThemeToggle";
+import { SessionProvider } from "~/ctx/session";
 import "~/global.css";
 import { setAndroidNavigationBar } from "~/lib/android-navigation-bar";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
-
-import { SessionProvider } from "../ctx/session";
 
 const LIGHT_THEME: Theme = {
   dark: false,
@@ -75,7 +75,8 @@ export default function RootLayout() {
               name="index"
               options={{
                 title: "PPI AUTHENTICATOR",
-                headerRight: () => <ThemeToggle />,
+                headerLeft: () => <ThemeToggle />,
+                headerRight: () => <AccountMenu />,
               }}
             />
             <Stack.Screen

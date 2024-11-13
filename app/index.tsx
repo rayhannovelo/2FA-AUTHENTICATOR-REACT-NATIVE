@@ -28,11 +28,10 @@ import {
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Text } from "~/components/ui/text";
+import { useSession } from "~/ctx/session";
 import { Plus } from "~/lib/icons/Plus";
 import { QrCode } from "~/lib/icons/QrCode";
 import { Trash } from "~/lib/icons/Trash";
-
-import { useSession } from "../ctx/session";
 
 type TwoFa = {
   id: number;
@@ -200,17 +199,6 @@ export default function Index() {
           defaultValue=""
         />
       </View>
-      {session ? (
-        <Button
-          variant="destructive"
-          className="flex flex-row gap-4 w-4/5 rounded-full mb-4"
-          onPress={() => signOut()}
-        >
-          <Text>Sign Out</Text>
-        </Button>
-      ) : (
-        <GoogleSignIn />
-      )}
       <ScrollView className="w-full">
         <GestureHandlerRootView>
           {twoFas?.map((value) => {
