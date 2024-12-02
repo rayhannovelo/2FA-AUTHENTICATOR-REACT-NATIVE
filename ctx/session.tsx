@@ -54,6 +54,8 @@ export function SessionProvider({ children }: PropsWithChildren) {
           // Perform sign-in logic here
           try {
             GoogleSignin.configure({
+              offlineAccess: true,
+              webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB,
               iosClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_IOS,
             });
 
@@ -132,6 +134,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 default:
                   // some other error happened
                   console.log("some other error happened");
+                  console.log(error);
               }
             } else {
               // an error that's not related to google sign in occurred

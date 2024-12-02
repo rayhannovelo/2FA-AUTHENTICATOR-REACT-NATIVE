@@ -77,6 +77,7 @@ export default function RootLayout() {
                 title: "PPI AUTHENTICATOR",
                 headerLeft: () => <ThemeToggle />,
                 headerRight: () => <AccountMenu />,
+                headerTitleAlign: "center",
               }}
             />
             <Stack.Screen

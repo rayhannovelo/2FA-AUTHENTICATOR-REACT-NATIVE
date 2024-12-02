@@ -18,7 +18,7 @@ export function AccountMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <TouchableOpacity className="w-12 flex items-end">
-          <CircleUserRound />
+          <CircleUserRound className="text-foreground" />
         </TouchableOpacity>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 native:w-72 mt-[5%] ml-[-5%]">
@@ -26,7 +26,7 @@ export function AccountMenu() {
         <DropdownMenuSeparator />
         {session ? (
           <DropdownMenuItem onPress={() => signOut()}>
-            <Text>Log out</Text>
+            <Text>Sign out</Text>
           </DropdownMenuItem>
         ) : (
           <DropdownMenuItem onPress={() => signIn()}>
