@@ -134,7 +134,7 @@ export function SessionProvider({ children }: PropsWithChildren) {
                 default:
                   // some other error happened
                   console.log("some other error happened");
-                  console.log(error);
+                  alert(error.message);
               }
             } else {
               // an error that's not related to google sign in occurred
