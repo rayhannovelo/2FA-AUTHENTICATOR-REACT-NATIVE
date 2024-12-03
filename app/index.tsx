@@ -260,7 +260,7 @@ export default function Index() {
       ) : (
         <GoogleSignIn />
       )}
-      <Text>{process.env.EXPO_PUBLIC_ENV_NAME}</Text>
+      <Text>Config ENV: {process.env.EXPO_PUBLIC_ENV_NAME}</Text>
     </View>
   );
 }
