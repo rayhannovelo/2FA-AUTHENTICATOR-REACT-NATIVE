@@ -17,7 +17,7 @@ export function AccountMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <TouchableOpacity className="w-12 flex items-end">
+        <TouchableOpacity className="w-16 flex items-end">
           <CircleUserRound className="text-foreground" />
         </TouchableOpacity>
       </DropdownMenuTrigger>

@@ -3,7 +3,6 @@ import axios from "axios";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
-import { useColorScheme as useNativewindColorScheme } from "nativewind";
 import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -32,6 +31,7 @@ import { useSession } from "~/ctx/session";
 import { Plus } from "~/lib/icons/Plus";
 import { QrCode } from "~/lib/icons/QrCode";
 import { Trash } from "~/lib/icons/Trash";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 type TwoFa = {
   id: number;
@@ -112,7 +112,7 @@ export default function Index() {
   const db = useSQLiteContext();
   const { session, signOut } = useSession();
 
-  const { colorScheme } = useNativewindColorScheme();
+  const { isDarkColorScheme } = useColorScheme();
   const [twoFas, setTwoFas] = useState<TwoFa[]>();
   const [search, setSearch] = useState("");
 
@@ -227,17 +227,15 @@ export default function Index() {
     </View>
   ) : (
     <View className="flex-1 justify-center items-center">
-      {colorScheme === "dark" ? (
+      {isDarkColorScheme ? (
         <Image
           source={require(`../assets/images/cat-dark.svg`)}
           style={styles.image}
-          cachePolicy={"memory-disk"}
         />
       ) : (
         <Image
           source={require(`../assets/images/cat.svg`)}
           style={styles.image}
-          cachePolicy={"memory-disk"}
         />
       )}
       <Text className="text-center px-8 mb-4">
