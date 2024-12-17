@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "PPI AUTHENTICATOR",
-    "slug": "ppi-authenticator",
+    "name": "2FA AUTHENTICATOR",
+    "slug": "2fa-authenticator",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon-ppi-authenticator.png",
+    "icon": "./assets/images/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash-ppi-authenticator.png",
+      "image": "./assets/images/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

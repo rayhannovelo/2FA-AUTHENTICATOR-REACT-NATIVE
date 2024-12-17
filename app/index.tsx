@@ -81,7 +81,7 @@ function RightAction({
             </AlertDialogTitle>
             <AlertDialogDescription>
               <Text>
-                When you remove this account from PPI Authenticator, you won't
+                When you remove this account from 2FA Authenticator, you won't
                 get codes to help you sign in securely anymore. Make sure you
                 update your settings for this account to reflect this change.
               </Text>
@@ -239,7 +239,7 @@ export default function Index() {
         />
       )}
       <Text className="text-center px-8 mb-4">
-        No PPI Authenticator codes here yet.
+        No 2FA Authenticator codes here yet.
       </Text>
       <Link href="/scan-qr" asChild>
         <Button className="flex flex-row gap-4 w-4/5 rounded-full mb-4">
@@ -258,7 +258,6 @@ export default function Index() {
       ) : (
         <GoogleSignIn />
       )}
-      <Text>Config ENV: {process.env.EXPO_PUBLIC_ENV_NAME}</Text>
     </View>
   );
 }

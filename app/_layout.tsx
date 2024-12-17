@@ -74,17 +74,10 @@ export default function RootLayout() {
             <Stack.Screen
               name="index"
               options={{
-                title: "PPI AUTHENTICATOR",
+                title: "2FA AUTHENTICATOR",
                 headerLeft: () => <ThemeToggle />,
                 headerRight: () => <AccountMenu />,
                 headerTitleAlign: "center",
-              }}
-            />
-            <Stack.Screen
-              name="camera"
-              options={{
-                title: "Camera",
-                headerBackTitle: "Back",
               }}
             />
             <Stack.Screen

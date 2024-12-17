@@ -1,10 +1,10 @@
+import * as AlertDialogPrimitive from "@rn-primitives/alert-dialog";
 import * as React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { buttonTextVariants, buttonVariants } from "~/components/ui/button";
-import * as AlertDialogPrimitive from "@rn-primitives/alert-dialog";
-import { cn } from "~/lib/utils";
 import { TextClassContext } from "~/components/ui/text";
+import { cn } from "~/lib/utils";
 
 const AlertDialog = AlertDialogPrimitive.Root;
 
@@ -24,7 +24,7 @@ const AlertDialogOverlayWeb = React.forwardRef<
         open
           ? "web:animate-in web:fade-in-0"
           : "web:animate-out web:fade-out-0",
-        className
+        className,
       )}
       {...props}
       ref={ref}
@@ -43,7 +43,7 @@ const AlertDialogOverlayNative = React.forwardRef<
       style={StyleSheet.absoluteFill}
       className={cn(
         "z-50 bg-black/80 flex justify-center items-center p-2",
-        className
+        className,
       )}
       {...props}
       ref={ref}
@@ -84,7 +84,7 @@ const AlertDialogContent = React.forwardRef<
             open
               ? "web:animate-in web:fade-in-0 web:zoom-in-95"
               : "web:animate-out web:fade-out-0 web:zoom-out-95",
-            className
+            className,
           )}
           {...props}
         />
@@ -109,7 +109,7 @@ const AlertDialogFooter = ({
   <View
     className={cn(
       "flex flex-col-reverse sm:flex-row sm:justify-end gap-2",
-      className
+      className,
     )}
     {...props}
   />
@@ -124,7 +124,7 @@ const AlertDialogTitle = React.forwardRef<
     ref={ref}
     className={cn(
       "text-lg native:text-xl text-foreground font-semibold",
-      className
+      className,
     )}
     {...props}
   />
